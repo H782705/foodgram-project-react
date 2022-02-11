@@ -113,6 +113,7 @@ venv.bak/
 backend/static/
 backend/static_files/
 static/
+!static_files/redoc.yaml 
 #static_files/
 
 # Spyder project settings
