@@ -42,7 +42,7 @@ jobs:
                   sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
                   cd infra
                   sudo docker-compose stop
-                  sudo docker-compose rm web
+                  sudo docker-compose rm foodgram_backend
                   cd ..
                   rm .env
                   touch .env
