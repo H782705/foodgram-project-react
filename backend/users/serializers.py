@@ -7,8 +7,6 @@ from recipes.models import Recipe
 
 from .models import Follow
 
-# from recipes.serializers import ImageRecipeSerializer
-
 User = get_user_model()
 
 

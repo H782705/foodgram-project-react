@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
+from django.db.models import Exists, OuterRef
 
 User = get_user_model()
 
@@ -62,6 +63,22 @@ class Tag(models.Model):
         return self.name
 
 
+class RecipeQuerySet(models.QuerySet):
+    def add_user_annotations(self, user_id):
+        return self.annotate(
+            is_favorited=Exists(
+                Favorite.objects.filter(
+                    user_id=user_id, recipe__pk=OuterRef('pk')
+                )
+            ),
+            is_in_shopping_cart=Exists(
+                Favorite.objects.filter(
+                    user_id=user_id, recipe__pk=OuterRef('pk')
+                )
+            ),
+        )
+
+
 class Recipe(models.Model):
     author = models.ForeignKey(
         User,
@@ -92,6 +109,8 @@ class Recipe(models.Model):
         ),
         verbose_name="Время приготовления",
     )
+
+    objects = RecipeQuerySet.as_manager()
 
     class Meta:
         ordering = ["-id"]

@@ -11,7 +11,7 @@ class IngredientSearchFilter(SearchFilter):
     search_param = "name"
 
 
-class AuthorAndTagFilter(FilterSet):
+class RecipeFilterSet(FilterSet):
     tags = filters.AllValuesMultipleFilter(field_name="tags__slug")
     author = filters.ModelChoiceFilter(queryset=User.objects.all())
     is_favorited = filters.BooleanFilter(method="filter_is_favorited")

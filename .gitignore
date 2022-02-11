@@ -111,7 +111,9 @@ env.bak/
 venv.bak/
 
 backend/static/
+backend/static_files/
 static/
+static_files/
 
 # Spyder project settings
 .spyderproject

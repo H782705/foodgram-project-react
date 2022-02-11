@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .filters import AuthorAndTagFilter, IngredientSearchFilter
+from .filters import RecipeFilterSet, IngredientSearchFilter
 from .models import Cart, Favorite, Ingredient, IngredientAmount, Recipe, Tag
 from .pagination import LimitPageNumberPagination
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
@@ -18,11 +18,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     pagination_class = LimitPageNumberPagination
-    filter_class = AuthorAndTagFilter
+    filter_class = RecipeFilterSet
     permission_classes = [IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    def get_queryset(self):
+        return self.queryset.add_user_annotations(user_id=self.request.user)
 
     @action(
         detail=True,
