@@ -38,7 +38,7 @@ jobs:
                passphrase: ${{ secrets.PASSPHRASE }}
                stack_file_name: docker-compose.yaml
                script: |
-                  cd foodgram-porject-react
+                  cd foodgram-project-react
                   sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
                   cd infra
                   sudo docker-compose stop
