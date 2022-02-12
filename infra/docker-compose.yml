@@ -44,8 +44,9 @@ services:
       - frontend
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - static_value:/static/
+      - static_value:/django_rest/static_files/
       - media_value:/media/
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
+
 

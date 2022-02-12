@@ -27,8 +27,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    # def get_queryset(self):
-    #    return self.queryset.add_user_annotations(user_id=self.request.user)
+    def get_queryset(self):
+        return self.queryset.add_user_annotations(user_id=self.request.user)
 
     @action(
         detail=True,
@@ -59,7 +59,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         final_list = {}
         ingredients = IngredientAmount.objects.filter(
             recipe__cart__user=request.user).values_list(
-            'ingredientamount__name', 'ingredientamount__measurement_unit',
+            'ingredient__name', 'ingredient__measurement_unit',
             'amount')
         for item in ingredients:
             name = item[0]

@@ -72,7 +72,7 @@ class RecipeQuerySet(models.QuerySet):
                 )
             ),
             is_in_shopping_cart=Exists(
-                Favorite.objects.filter(
+                Cart.objects.filter(
                     user_id=user_id, recipe__pk=OuterRef('pk')
                 )
             ),
@@ -109,8 +109,7 @@ class Recipe(models.Model):
         ),
         verbose_name="Время приготовления",
     )
-
-    # objects = RecipeQuerySet.as_manager()
+    objects = RecipeQuerySet.as_manager()
 
     class Meta:
         ordering = ["-id"]
