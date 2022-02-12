@@ -38,7 +38,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def favorite(self, request, pk=None):
         return self.add_obj(Favorite, request.user, pk)
 
-    @favorite.mapping_delete
+    @favorite.mapping.delete
     def del_favorite(self, request, pk=None):
         return self.delete_obj(Favorite, request.user, pk)
 
