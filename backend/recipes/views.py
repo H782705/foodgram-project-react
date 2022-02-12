@@ -1,14 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
 from .filters import IngredientSearchFilter, RecipeFilterSet
 from .models import Cart, Favorite, Ingredient, IngredientAmount, Recipe, Tag
 from .pagination import LimitPageNumberPagination
@@ -32,27 +32,28 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=True,
-        methods=["post", "delete"],
+        methods=["post"],
         permission_classes=[IsAuthenticated],
     )
     def favorite(self, request, pk=None):
-        if request.method == "POST":
-            return self.add_obj(Favorite, request.user, pk)
-        elif request.method == "DELETE":
-            return self.delete_obj(Favorite, request.user, pk)
-        return None
+        return self.add_obj(Favorite, request.user, pk)
+
+    @favorite.mapping_delete
+    def del_favorite(self, request, pk=None):
+        return self.delete_obj(Favorite, request.user, pk)
 
     @action(
         detail=True,
-        methods=["post", "delete"],
+        methods=["post"],
         permission_classes=[IsAuthenticated],
     )
     def shopping_cart(self, request, pk=None):
         if request.method == "POST":
             return self.add_obj(Cart, request.user, pk)
-        elif request.method == "DELETE":
-            return self.delete_obj(Cart, request.user, pk)
-        return None
+
+    @shopping_cart.mapping.delete
+    def del_shopping_cart(self, request, pk=None):
+        return self.delete_obj(Cart, request.user, pk)
 
     @action(
         detail=False, methods=["get"], permission_classes=[IsAuthenticated]
