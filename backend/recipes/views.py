@@ -48,8 +48,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=[IsAuthenticated],
     )
     def shopping_cart(self, request, pk=None):
-        if request.method == "POST":
-            return self.add_obj(Cart, request.user, pk)
+        return self.add_obj(Cart, request.user, pk)
 
     @shopping_cart.mapping.delete
     def del_shopping_cart(self, request, pk=None):
