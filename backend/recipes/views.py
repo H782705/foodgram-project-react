@@ -54,7 +54,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return self.delete_obj(Cart, request.user, pk)
         return None
 
-    @action(detail=True, methods=["get"], permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=["get"], permission_classes=[IsAuthenticated])
     def download_shopping_cart(self, request):
         final_list = {}
         ingredients = IngredientAmount.objects.filter(
