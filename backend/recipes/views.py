@@ -59,7 +59,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         final_list = {}
         ingredients = IngredientAmount.objects.filter(
             recipe__cart__user=request.user).values_list(
-            'ingredient__name', 'ingredient__measurement_unit',
+            'ingredientamount__name', 'ingredientamount__measurement_unit',
             'amount')
         for item in ingredients:
             name = item[0]
