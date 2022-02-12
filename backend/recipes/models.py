@@ -7,8 +7,9 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=200,
-                            verbose_name="Название ингредиента")
+    name = models.CharField(
+        max_length=200, verbose_name="Название ингредиента"
+    )
     measurement_unit = models.CharField(
         max_length=200, verbose_name="Единица измерения"
     )
@@ -68,13 +69,11 @@ class RecipeQuerySet(models.QuerySet):
         return self.annotate(
             is_favorited=Exists(
                 Favorite.objects.filter(
-                    user_id=user_id, recipe__pk=OuterRef('pk')
+                    user_id=user_id, recipe__pk=OuterRef("pk")
                 )
             ),
             is_in_shopping_cart=Exists(
-                Cart.objects.filter(
-                    user_id=user_id, recipe__pk=OuterRef('pk')
-                )
+                Cart.objects.filter(user_id=user_id, recipe__pk=OuterRef("pk"))
             ),
         )
 
