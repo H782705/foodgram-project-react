@@ -97,33 +97,35 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            if not ingredient.get("amount").isdigit():
-                raise serializers.ValidationError(
-                    "Должно быть число"
-                )
             IngredientAmount.objects.create(
                 recipe=recipe,
-                ingredient_id=ingredient.get("id"),
-                amount=ingredient.get("amount"),
+                ingredient_id=ingredient.get('id'),
+                amount=ingredient.get('amount'),
             )
 
     def create(self, validated_data):
-        ingredients_data = validated_data.pop("ingredients")
-        recipe = super().create(validated_data)
-        tags_data = self.initial_data.get("tags")
+        image = validated_data.pop('image')
+        ingredients_data = validated_data.pop('ingredients')
+        recipe = Recipe.objects.create(image=image, **validated_data)
+        tags_data = self.initial_data.get('tags')
         recipe.tags.set(tags_data)
         self.create_ingredients(ingredients_data, recipe)
         return recipe
 
-    def update(self, recipe, validated_data):
-        if "ingredients" in validated_data:
-            ingredients = validated_data.pop("ingredients")
-            recipe.ingredients.clear()
-            self.create_ingredients(ingredients, recipe)
-        if "tags" in validated_data:
-            tags_data = validated_data.pop("tags")
-            recipe.tags.set(tags_data)
-        return super().update(recipe, validated_data)
+    def update(self, instance, validated_data):
+        instance.image = validated_data.get('image', instance.image)
+        instance.name = validated_data.get('name', instance.name)
+        instance.text = validated_data.get('text', instance.text)
+        instance.cooking_time = validated_data.get(
+            'cooking_time', instance.cooking_time
+        )
+        instance.tags.clear()
+        tags_data = self.initial_data.get('tags')
+        instance.tags.set(tags_data)
+        IngredientAmount.objects.filter(recipe=instance).all().delete()
+        self.create_ingredients(validated_data.get('ingredients'), instance)
+        instance.save()
+        return 
 
 
 class ImageRecipeSerializer(serializers.ModelSerializer):
