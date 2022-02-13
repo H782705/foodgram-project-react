@@ -49,6 +49,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     )
     is_favorited = serializers.BooleanField(read_only=True)
     is_in_shopping_cart = serializers.BooleanField(read_only=True)
+
     cooking_time = serializers.IntegerField()
 
     class Meta:
@@ -66,7 +67,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             "cooking_time",
         )
 
-    def validate_ingredients(self, data):
+    def validate(self, data):
         ingredients = self.initial_data.get("ingredients")
         if not ingredients:
             raise serializers.ValidationError(
@@ -96,6 +97,10 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
+            if not ingredient.get("amount").isdigit():
+                raise serializers.ValidationError(
+                    "Должно быть число"
+                )
             IngredientAmount.objects.create(
                 recipe=recipe,
                 ingredient_id=ingredient.get("id"),
