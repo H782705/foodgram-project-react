@@ -28,7 +28,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     def get_queryset(self):
-        return self.queryset.add_user_annotations(user_id=self.request.user)
+        if self.request.user.is_authenticated:
+            return self.queryset.add_user_annotations(user_id=self.request.user)
+        pass
 
     @action(
         detail=True,
