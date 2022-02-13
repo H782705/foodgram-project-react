@@ -108,7 +108,7 @@ class Recipe(models.Model):
         ),
         verbose_name="Время приготовления",
     )
-    # objects = RecipeQuerySet.as_manager()
+    objects = RecipeQuerySet.as_manager()
 
     class Meta:
         ordering = ["-id"]
