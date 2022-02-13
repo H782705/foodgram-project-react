@@ -25,7 +25,6 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
     measurement_unit = serializers.ReadOnlyField(
         source="ingredient.measurement_unit"
     )
-    amount = serializers.IntegerField()
 
     class Meta:
         model = IngredientAmount
@@ -49,7 +48,6 @@ class RecipeSerializer(serializers.ModelSerializer):
     )
     is_favorited = serializers.BooleanField(read_only=True)
     is_in_shopping_cart = serializers.BooleanField(read_only=True)
-
     cooking_time = serializers.IntegerField()
 
     class Meta:
@@ -125,7 +123,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         IngredientAmount.objects.filter(recipe=instance).all().delete()
         self.create_ingredients(validated_data.get('ingredients'), instance)
         instance.save()
-        return 
+        return instance
 
 
 class ImageRecipeSerializer(serializers.ModelSerializer):
