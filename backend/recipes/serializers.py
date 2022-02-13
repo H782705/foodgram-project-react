@@ -49,6 +49,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     )
     is_favorited = serializers.BooleanField(read_only=True)
     is_in_shopping_cart = serializers.BooleanField(read_only=True)
+    cooking_time = serializers.IntegerField()
 
     class Meta:
         model = Recipe
