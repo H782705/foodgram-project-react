@@ -80,6 +80,10 @@ class RecipeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     "Ингридиенты должны быть уникальными"
                 )
+            if not ingredient_item["amount"].isdigit():
+                raise serializers.ValidationError(
+                    "Ингруникальными"
+                )
             ingredient_list.append(ingredient)
             if int(ingredient_item["amount"]) <= 0:
                 raise serializers.ValidationError(
