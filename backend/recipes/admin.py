@@ -13,8 +13,9 @@ class IngredientAdmin(admin.ModelAdmin):
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ("name", "author", "count_favorites")
-    list_filter = ("author", "name", "tags")
+    list_display = ("name", "count_favorites")
+    list_filter = ("name", "tags")
+    autocomplete_fields = ['author']
 
     def count_favorites(self, obj):
         return obj.favorites.count()
