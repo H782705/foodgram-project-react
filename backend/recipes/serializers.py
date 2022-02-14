@@ -71,10 +71,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"ingredients": "Нужен хоть один ингридиент для рецепта"}
             )
-        if not ingredients["amount"].isdigit():
-            raise serializers.ValidationError(
-                {"ingredients": "требуется целочисленное значение"}
-            )
         ingredient_list = []
         for ingredient_item in ingredients:
             ingredient = get_object_or_404(
@@ -83,6 +79,10 @@ class RecipeSerializer(serializers.ModelSerializer):
             if ingredient in ingredient_list:
                 raise serializers.ValidationError(
                     "Ингридиенты должны быть уникальными"
+                )
+            if not ingredient_item["amount"].isdigit():
+                raise serializers.ValidationError(
+                    "Количество ингредиента: Требуется целочисленное значение"
                 )
             ingredient_list.append(ingredient)
             if int(ingredient_item["amount"]) <= 0:
